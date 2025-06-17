@@ -18,26 +18,31 @@ public class ropes {
 
    public static void solve(int n, int k, int[] arr) {
       double low = 0, high = 1e7;
+      double precision = 1e6;
 
-      for (int i = 0; i < 50; i++) { // Binary search for precision
+      //  Search Space = log(high - low) * log(10^precision)
+      //  log(10^7) * log(10^6) => log(10 ^ 13) => 13 * log(10)
+      //  13 * 3.322 => 43.186 ~ 50 iterations.
+
+      for(int i = 1; i <= 50; i++) {
          double mid = (low + high) / 2;
-
-         if (check(mid, k, arr)) {
-            low = mid; // If possible, move low up
+         if(check(arr, mid, k)) {
+            low = mid;
          } else {
-            high = mid; // Otherwise, move high down
+            high = mid;
          }
       }
 
       System.out.printf("%.6f%n", low); // Print with required precision
    }
 
-   public static boolean check(double x, int k, int[] arr) {
-      int c = 0;
-      for (int i = 0; i < arr.length; i++) {
-         c += (int) (arr[i] / x);
+   public static boolean check(int[] arr, double x, int k) {
+      int cnt = 0;
+      for(int i = 0; i < arr.length; i++) {
+         cnt += (int) arr[i] / x;
       }
 
-      return c >= k;
+      return cnt >= k; 
    }
+
 }
